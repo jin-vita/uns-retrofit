@@ -1,5 +1,6 @@
 package org.techtown.unsretrofit
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import org.techtown.unsretrofit.databinding.ActivityMainBinding
@@ -8,6 +9,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import kotlin.random.Random
 
+@SuppressLint("SetTextI18n")
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val tag: String = javaClass.simpleName
