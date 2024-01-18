@@ -6,6 +6,7 @@ import org.techtown.unsretrofit.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
@@ -20,9 +21,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun initButton() = with(binding) {
         postListButton.setOnClickListener { getPostList() }
-        queryPostButton.setOnClickListener { getQueryPost(3) }
-        pathPostButton.setOnClickListener { getPathPost(20) }
+        queryPostButton.setOnClickListener { getQueryPost(getRandom()) }
+        pathPostButton.setOnClickListener { getPathPost(getRandom()) }
     }
+
+    private fun getRandom(): Int = Random.nextInt(1, 150)
 
     private fun setData(code: Int, post: Post) = with(binding) {
         post.apply {
@@ -37,53 +40,65 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getPostList() {
-        val method = object {}.javaClass.enclosingMethod?.name
+        val method = Thread.currentThread().stackTrace[2].methodName
+        AppData.debug(tag, "$method called.")
+        binding.resultText.text = "$method is loading..."
         TestClient.api.getPostList().enqueue(object : Callback<PostsData> {
             override fun onResponse(call: Call<PostsData>, response: Response<PostsData>) {
                 val code = response.code()
                 if (response.isSuccessful) {
                     response.body()?.apply {
-                        AppData.error(tag, "$method isSuccessful. size: ${this.size}")
+                        AppData.error(tag, "$method isSuccessful. size: $size")
                         AppData.debug(tag, "data: $this")
                         this.first().apply {
                             val post = Post(id = id, userId = userId, title = title, body = body)
                             setData(code, post)
                         }
                     }
-                } else AppData.error(tag, "$method isNotSuccessful. code: $code")
+                } else binding.resultText.text = "$method isNotSuccessful. code: $code"
             }
 
             override fun onFailure(call: Call<PostsData>, t: Throwable) {
-                AppData.error(tag, "$method isFail, ${t.message}")
+                binding.resultText.text = "$method isFail, ${t.message}"
             }
         })
     }
 
     private fun getQueryPost(postId: Int) {
-        val method = object {}.javaClass.enclosingMethod?.name
+        val method = Thread.currentThread().stackTrace[2].methodName
+        AppData.debug(tag, "$method called. postId: $postId")
+        binding.resultText.text = "$method is loading..."
         TestClient.api.getQueryPost(postId).enqueue(object : Callback<PostsData> {
             override fun onResponse(call: Call<PostsData>, response: Response<PostsData>) {
                 val code = response.code()
                 if (response.isSuccessful) {
                     response.body()?.apply {
-                        AppData.error(tag, "$method isSuccessful. size: ${this.size}")
+                        AppData.error(tag, "$method isSuccessful. size: $size")
                         AppData.debug(tag, "data: $this")
+
+                        if (size == 0) {
+                            binding.resultText.text = "There is no postId $postId post."
+                            return
+                        }
+
                         this[0].apply {
                             val post = Post(id = id, userId = userId, title = title, body = body)
                             setData(code, post)
                         }
                     }
-                } else AppData.error(tag, "$method isNotSuccessful. code: $code")
+                } else binding.resultText.text = "$method isNotSuccessful. code: $code, postId: $postId"
             }
 
             override fun onFailure(call: Call<PostsData>, t: Throwable) {
-                AppData.error(tag, "$method isFail, ${t.message}")
+                binding.resultText.text = "$method isFail, ${t.message}"
             }
         })
     }
 
     private fun getPathPost(postId: Int) {
-        val method = object {}.javaClass.enclosingMethod?.name
+        val method = Thread.currentThread().stackTrace[2].methodName
+        AppData.debug(tag, "$method called. postId: $postId")
+        binding.resultText.text = "$method is loading..."
         TestClient.api.getPathPost(postId).enqueue(object : Callback<PostData> {
             override fun onResponse(call: Call<PostData>, response: Response<PostData>) {
                 val code = response.code()
@@ -94,11 +109,11 @@ class MainActivity : AppCompatActivity() {
                         val post = Post(id = id, userId = userId, title = title, body = body)
                         setData(code, post)
                     }
-                } else AppData.error(tag, "$method isNotSuccessful. code: $code")
+                } else binding.resultText.text = "$method isNotSuccessful. code: $code, postId: $postId"
             }
 
             override fun onFailure(call: Call<PostData>, t: Throwable) {
-                AppData.error(tag, "$method isFail, ${t.message}")
+                binding.resultText.text = "$method isFail, ${t.message}"
             }
         })
     }
