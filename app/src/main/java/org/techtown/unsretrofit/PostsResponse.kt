@@ -2,7 +2,7 @@ package org.techtown.unsretrofit
 
 import com.google.gson.annotations.SerializedName
 
-class PostsData : ArrayList<PostsData.PostDataItem>() {
+class PostsResponse : ArrayList<PostsResponse.PostDataItem>() {
     data class PostDataItem(
         @SerializedName("body")
         val body: String,

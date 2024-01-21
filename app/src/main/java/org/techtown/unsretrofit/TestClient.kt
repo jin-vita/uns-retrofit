@@ -19,17 +19,17 @@ import javax.net.ssl.*
 object TestClient {
     interface TestApi {
         @GET("posts")
-        fun getPostList(): Call<PostsData>
+        fun getPostList(): Call<PostsResponse>
 
         @GET("posts")
         fun getQueryPost(
             @Query("id") postId: Int
-        ): Call<PostsData>
+        ): Call<PostsResponse>
 
         @GET("posts/{postId}")
         fun getPathPost(
             @Path("postId") postId: Int
-        ): Call<PostData>
+        ): Call<PostResponse>
     }
 
     private const val TAG = "RobotClient"

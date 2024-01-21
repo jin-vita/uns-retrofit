@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity() {
         val method = Thread.currentThread().stackTrace[2].methodName
         AppData.debug(tag, "$method called.")
         binding.resultText.text = "$method is loading..."
-        TestClient.api.getPostList().enqueue(object : Callback<PostsData> {
-            override fun onResponse(call: Call<PostsData>, response: Response<PostsData>) {
+        TestClient.api.getPostList().enqueue(object : Callback<PostsResponse> {
+            override fun onResponse(call: Call<PostsResponse>, response: Response<PostsResponse>) {
                 val code = response.code()
                 if (response.isSuccessful) {
                     response.body()?.apply {
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 } else binding.resultText.text = "$method isNotSuccessful. code: $code"
             }
 
-            override fun onFailure(call: Call<PostsData>, t: Throwable) {
+            override fun onFailure(call: Call<PostsResponse>, t: Throwable) {
                 binding.resultText.text = "$method isFail, ${t.message}"
             }
         })
@@ -70,8 +70,8 @@ class MainActivity : AppCompatActivity() {
         val method = Thread.currentThread().stackTrace[2].methodName
         AppData.debug(tag, "$method called. postId: $postId")
         binding.resultText.text = "$method is loading..."
-        TestClient.api.getQueryPost(postId).enqueue(object : Callback<PostsData> {
-            override fun onResponse(call: Call<PostsData>, response: Response<PostsData>) {
+        TestClient.api.getQueryPost(postId).enqueue(object : Callback<PostsResponse> {
+            override fun onResponse(call: Call<PostsResponse>, response: Response<PostsResponse>) {
                 val code = response.code()
                 if (response.isSuccessful) {
                     response.body()?.apply {
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
                 } else binding.resultText.text = "$method isNotSuccessful. code: $code, postId: $postId"
             }
 
-            override fun onFailure(call: Call<PostsData>, t: Throwable) {
+            override fun onFailure(call: Call<PostsResponse>, t: Throwable) {
                 binding.resultText.text = "$method isFail, ${t.message}"
             }
         })
@@ -101,8 +101,8 @@ class MainActivity : AppCompatActivity() {
         val method = Thread.currentThread().stackTrace[2].methodName
         AppData.debug(tag, "$method called. postId: $postId")
         binding.resultText.text = "$method is loading..."
-        TestClient.api.getPathPost(postId).enqueue(object : Callback<PostData> {
-            override fun onResponse(call: Call<PostData>, response: Response<PostData>) {
+        TestClient.api.getPathPost(postId).enqueue(object : Callback<PostResponse> {
+            override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
                 val code = response.code()
                 if (response.isSuccessful) {
                     response.body()?.apply {
@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
                 } else binding.resultText.text = "$method isNotSuccessful. code: $code, postId: $postId"
             }
 
-            override fun onFailure(call: Call<PostData>, t: Throwable) {
+            override fun onFailure(call: Call<PostResponse>, t: Throwable) {
                 binding.resultText.text = "$method isFail, ${t.message}"
             }
         })
