@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     private fun getPostList() {
         val method = Thread.currentThread().stackTrace[2].methodName
         AppData.debug(tag, "$method called.")
+        AppData.showToast(this@MainActivity, "request $method")
         binding.resultText.text = "$method is loading..."
         TestClient.api.getPostList().enqueue(object : Callback<PostsResponse> {
             override fun onResponse(call: Call<PostsResponse>, response: Response<PostsResponse>) {
@@ -69,6 +70,7 @@ class MainActivity : AppCompatActivity() {
     private fun getQueryPost(postId: Int) {
         val method = Thread.currentThread().stackTrace[2].methodName
         AppData.debug(tag, "$method called. postId: $postId")
+        AppData.showToast(this@MainActivity, "request $method, postId: $postId")
         binding.resultText.text = "$method is loading..."
         TestClient.api.getQueryPost(postId).enqueue(object : Callback<PostsResponse> {
             override fun onResponse(call: Call<PostsResponse>, response: Response<PostsResponse>) {
@@ -100,6 +102,7 @@ class MainActivity : AppCompatActivity() {
     private fun getPathPost(postId: Int) {
         val method = Thread.currentThread().stackTrace[2].methodName
         AppData.debug(tag, "$method called. postId: $postId")
+        AppData.showToast(this@MainActivity, "request $method, postId: $postId")
         binding.resultText.text = "$method is loading..."
         TestClient.api.getPathPost(postId).enqueue(object : Callback<PostResponse> {
             override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
