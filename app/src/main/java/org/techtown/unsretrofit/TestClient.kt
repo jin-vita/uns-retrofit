@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit
 import javax.net.ssl.*
 
 object TestClient {
+    private val tag: String = javaClass.simpleName
+
     interface TestApi {
         @GET("posts")
         fun getPostList(): Call<PostsResponse>
@@ -32,7 +34,6 @@ object TestClient {
         ): Call<PostResponse>
     }
 
-    private const val TAG = "RobotClient"
 
     @Volatile
     private var instance: TestApi? = null
@@ -61,12 +62,12 @@ object TestClient {
 
             @Throws(CertificateException::class)
             override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
-                AppData.debug(TAG, ": authType: $authType")
+                AppData.debug(tag, ": authType: $authType")
             }
 
             @Throws(CertificateException::class)
             override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
-                AppData.debug(TAG, ": authType: $authType")
+                AppData.debug(tag, ": authType: $authType")
             }
         }
 
@@ -76,7 +77,7 @@ object TestClient {
             val sslSocketFactory = sslContext.socketFactory
             clientBuilder.sslSocketFactory(sslSocketFactory, x509TrustManager)
         } catch (e: Exception) {
-            AppData.error(TAG, e.message!!)
+            AppData.error(tag, e.message!!)
         }
 
         clientBuilder.hostnameVerifier(RelaxedHostNameVerifier())
